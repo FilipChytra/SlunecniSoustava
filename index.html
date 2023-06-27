@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- files in public folder are served as root. Here the favicon is taken from the public folder. -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, minimum-scale=1.0">
+  <title>(Babylon.js + vite) boilerplate</title>
+  <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      height: 12rem;
+      width: 4rem;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+
+    #nextPlaneta {
+      transition: all 1s ease-out;
+      right: 0;
+    }
+
+    #nextPlaneta.openInfoKartu {
+      right: 50%;
+    }
+
+    #nextPlaneta.openInfoKartu.vertical {
+      right: 0;
+      top: 25%;
+      transform: translate(0, -50%);
+    }
+
+    #previousPlaneta {
+      transition: all 1s ease-out;
+      left: 0;
+    }
+
+    #previousPlaneta.vertical.openInfoKartu {
+      top: 25%;
+      transform: translate(0, -50%);
+    }
+
+    #toggleInfoKartu{
+      background-color: transparent;
+      border: none;
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      top: 0;
+      transform: translate(-100%, 0);
+    }
+
+    #toggleInfoKartu.openInfoKartu{
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(0, 0);
+    }
+    
+
+    #kontent{
+      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      height: 100%;
+    }
+
+    #kontent.vertical{
+      flex-direction: column;
+    }
+
+    #renderCanvas {
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      transition: all 1s ease-out;
+    }
+
+    #renderCanvas.openInfoKartu {
+      width: 50%;
+    }
+
+    #renderCanvas.vertical {
+      width: 100%;
+      height: 100%;
+    }
+
+    #renderCanvas.vertical.openInfoKartu{
+      width: 100%;
+      height: 50%;
+    }
+
+    #infoKarta{
+      width: 50%;
+      height: 100%;
+      position: relative;
+    }
+
+    #infoKarta.vertical{
+      width: 100%;
+      height: 50%;
+    }
+
+    #infoKarta.vertical #toggleInfoKartu{
+      height: 4rem;
+      width: 4rem;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, -100%);
+    }
+
+    #infoKarta.vertical #toggleInfoKartu.openInfoKartu{
+      position: absolute;
+      left: 100%;
+      top: 0;
+      transform: translate(-100%, 0);
+    }
+
+    .full-width {
+      width: 100% !important;
+    }
+
+    #dotnav {
+      display: flex;
+      justify-content: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: gray;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background-color: blue;
+    }
+
+    .infoPlanety{
+      height: 100%;
+      background-color: #222;
+      padding: 2rem;
+      color: white;
+      overflow-x: scroll;
+    }
+
+    h3 {
+      margin-top:1rem;
+      margin-bottom:1rem;
+      font-size: 4vw;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #infoKarta.vertical h3 {
+      font-size: 4vh;
+    }
+
+    h5 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 3vw;
+      color:  darkgoldenrod;
+      margin: 0;
+      padding-bottom: .5vw;
+      border-bottom: 1px solid #666;
+    }
+
+    h5 span {
+      color:  darkgoldenrod;
+      color: #666;
+      
+    }
+
+    #infoKarta.vertical h5 {
+      font-size: 3vh;
+    }
+
+    .tile {
+      margin-top: 2vh;
+    }
+
+    h4 {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1.3vw;
+      color: #666;
+      margin: 0;
+
+    }
+
+    #infoKarta.vertical h4 {
+      font-size: 1.2vh;
+    }
+
+    #paragraf {
+      max-height: 35%;
+      min-width: 45vw;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.9vw;
+      text-align: justify;
+    }
+
+    #infoKarta.vertical #paragraf {
+      font-size: 1.7vh;
+      text-align: left;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      position: relative;
+      margin-bottom: 2rem;
+
+    }
+
+    .card {
+      min-width: 100%;
+      max-height: 35%;
+      position: relative;
+    }
+    
+    .hide {
+      display: none;
+    }
+
+
+  </style>
+
+</head>
+
+<body>
+  <div id="kontent" >
+    <button id="previousPlaneta" type="button">
+      <svg id="iconPrevious" width="40" height="40" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#fff" fill-rule="evenodd" d="M7.22165154,9.89744874 C9.52208535,7.58981934 11.7700755,5.33826192 13.9656219,3.14277649 C14.1209717,2.97988892 14.2765198,2.59362793 13.9656219,2.24739075 C13.6547241,1.90115356 13.1625366,1.93119812 12.9394989,2.16644287 C10.6628164,4.4490153 8.2816569,6.83439128 5.79602051,9.3225708 C5.5986735,9.48506673 5.5,9.67669271 5.5,9.89744874 C5.5,10.1182048 5.5986735,10.315327 5.79602051,10.4888153 C8.60631704,13.2334646 11.1006865,15.6689637 13.2791289,17.7953128 C13.4962463,18 13.9656219,18.1251984 14.3231659,17.7660828 C14.6807098,17.4069672 14.5432434,17.0530853 14.3809204,16.8845825 C12.3062744,14.866628 9.91985146,12.5375834 7.22165154,9.89744874 Z"/>
+      </svg>
+    </button>
+    <button id="nextPlaneta" type="button">
+      <svg id="iconNext" width="40" height="40" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#fff" fill-rule="evenodd" d="M7.05307007,2.15808105 L14.2962587,9.41418482 C14.4320862,9.5496827 14.5,9.71077067 14.5,9.89744874 C14.5,10.0841268 14.4320862,10.2497803 14.2962587,10.3944092 C11.6760845,12.9498393 9.15095523,15.4168071 6.72087106,17.7953128 C6.5962677,17.912323 6.09560574,18.2032928 5.70989407,17.7705688 C5.3241824,17.3378448 5.55848694,16.9602509 5.70989407,16.8045692 C7.97174895,14.594209 10.3279004,12.2918355 12.7783485,9.89744874 L6.03100586,3.13816833 C5.78524099,2.79925826 5.80526899,2.48632792 6.09108986,2.19937732 C6.37691073,1.91242672 6.6975708,1.8986613 7.05307007,2.15808105 Z"/>
+      </svg>
+    </button>
+    
+    <canvas id="renderCanvas">
+    </canvas>
+    <div id="infoKarta" >
+      <button id="toggleInfoKartu" type="button">
+        <svg id="icon" width="30px" height="30px" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+        </svg>
+      </button>
+
+      <div class="infoPlanety">
+            <h3 id="title">Planeta</h3>
+        <div class="cards">
+            <div class="card">
+              <p id="paragraf"></p>
+            </div>
+            <div id="infoTiles" class="card">
+              <div class="tile">
+                <h5 id="typPlanety"></h5>
+                <h4>Typ planety</h4>
+              </div>
+
+              <div class="tile">
+                <h5 id="pocetMesicu"></h5>
+                <h4>Počet měsíců</h4>
+              </div>
+
+              <div class="tile">
+                <h5 id="vzdalenostOdSlunce"></h5>
+                <h4>Vzdálenost od Slunce</h4>
+              </div>
+
+              <div class="tile">
+                <h5 id="polomer"></h5>
+                <h4>Poloměr</h4>
+              </div>
+
+              <div class="tile">
+                <h5 id="delkaDne"></h5>
+                <h4>Délka dne</h4>
+              </div>
+
+              <div class="tile">
+                <h5 id="delkaRoku"></h5>
+                <h4>Délka roku</h4>
+              </div>
+            </div>
+        </div>        
+      </div>
+
+
+      
+    </div>
+  </div>
+  
+
+ 
+  <script type="module" src="/src/main.ts"></script>
+
+</body>
+
+</html>
