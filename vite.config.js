@@ -8,7 +8,7 @@ export default defineConfig(({ command, mode }) => {
             }
         },
         assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.gif'],
-        base: '/SolarSystem/'
+        base: '/SlunecniSoustava/'
 
     };
 });
