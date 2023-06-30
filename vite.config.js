@@ -7,7 +7,7 @@ export default defineConfig(({ command, mode }) => {
                 'babylonjs': mode === 'development' ? 'babylonjs/babylon.max' : 'babylonjs'
             }
         },
-        assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.gif'],
+        assetsInclude: ['**/*.ico', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.gif'],
         base: '/SlunecniSoustava/'
 
     };

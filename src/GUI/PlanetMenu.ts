@@ -6,7 +6,7 @@ export class InfoKartaPlanety {
     private app: SlunecniSoustava;
     private kartaInfoPlanety: KartaInfoPlanety
     private flexContent: HTMLElement | null;
-    private canvas: HTMLCanvasElement | null;
+    private canvasContainer : HTMLElement | null;
     private infoKarta : HTMLElement | null;
     private infoButton : HTMLElement | null ;
     private nextButton : HTMLElement | null ;    
@@ -21,7 +21,7 @@ export class InfoKartaPlanety {
         this.app = app;
 
         this.flexContent = document.getElementById("kontent");
-        this.canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+        this.canvasContainer = document.getElementById("canvasContainer");
         this.infoKarta = document.getElementById('infoKarta');
         this.infoButton = document.getElementById('toggleInfoKartu');
         this.nextButton = document.getElementById('nextPlaneta');
@@ -56,7 +56,7 @@ export class InfoKartaPlanety {
 
     private resizeContent(){
             this.flexContent?.classList.toggle("vertical");
-            this.canvas?.classList.toggle("vertical");
+            this.canvasContainer?.classList.toggle("vertical");
             this.infoKarta?.classList.toggle("vertical");
             this.nextButton?.classList.toggle("vertical");
             this.previousButton?.classList.toggle("vertical")
@@ -82,15 +82,11 @@ export class InfoKartaPlanety {
 
     public toggleOpen(){
         this.infoKartaOpenState = !this.infoKartaOpenState;
-        this.canvas?.classList.toggle("openInfoKartu");
+        this.canvasContainer?.classList.toggle("openInfoKartu");
         this.infoButton?.classList.toggle("openInfoKartu");
         this.nextButton?.classList.toggle("openInfoKartu");
         this.previousButton?.classList.toggle("openInfoKartu");
-
-
-
         this.setIcon();
-
     }
 
     private nextPlaneta(){
@@ -103,7 +99,6 @@ export class InfoKartaPlanety {
         const previousIndex: number = this.seznamPlanet.indexOf(this.app.meshIdInView.name) - 1;
         (previousIndex >= 0) ? this.app.setMeshInView(this.seznamPlanet[previousIndex]) : this.app.setMeshInView("Slunce");
         this.kartaInfoPlanety.changeInfoPlanety();
-
     }
 }
    

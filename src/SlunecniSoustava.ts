@@ -7,6 +7,7 @@ import { InfoKartaPlanety } from './GUI/PlanetMenu';
 
 import HvezdnaOblohaPhotoDomeUrl from '/src/textury/starmap_2020_4k.jpg';
 import { DataPlanet } from './PlanetarniSoustava/DataPlanet';
+import { LoadingAnimation } from './GUI/LoadingAnimation';
 export class SlunecniSoustava {
     public engine: BABYLON.Engine;
     public scene: BABYLON.Scene;
@@ -24,6 +25,9 @@ export class SlunecniSoustava {
 
         this.getObserver(canvas).observe(canvas)
         this.infoKartaPlanety = new InfoKartaPlanety(this);
+        this.engine.loadingScreen = new LoadingAnimation('');
+        this.engine.displayLoadingUI();
+
     }
 
     debug(debugOn: boolean = true) {
@@ -44,6 +48,9 @@ export class SlunecniSoustava {
                 if (this.canvas.style.height !== "50%" && this.canvas.style.height !== "100%" || this.canvas.style.width !== "50%" && this.canvas.style.width !== "100%") {
                     this.engine.resize()
                 }
+                if(this.scene.isReady()){
+                    this.engine.hideLoadingUI();
+                }
              
             })
             this.scene.render();  
@@ -51,12 +58,9 @@ export class SlunecniSoustava {
     }
 
     private getObserver(canvas: HTMLCanvasElement) {
-        // Create a new ResizeObserver instance
         const observer = new ResizeObserver(entries => {
-        // Loop through the entries and detect any changes to the canvas element
         for (let entry of entries) {
             if (entry.target === canvas && entry.contentRect.width !== canvas.width) {
-            // The canvas element has been resized, update its width property
                 this.engine.resize()
             }
         }
@@ -118,6 +122,7 @@ export class SlunecniSoustava {
         const glowLayer: BABYLON.GlowLayer = new BABYLON.GlowLayer("glowLayer", scene);
 
         const hveznaObloha: BABYLON.PhotoDome = new BABYLON.PhotoDome("hvěznáObloha", HvezdnaOblohaPhotoDomeUrl, {size: 10000}, scene);
+
         const slunecniSoustava = new BABYLON.Mesh("SlunečníSoustava", scene);
         const slunce: BABYLON.Mesh = this.slunce.createSlunce(scene); 
         slunce.actionManager = new BABYLON.ActionManager(scene);
@@ -152,33 +157,18 @@ export class SlunecniSoustava {
                     this.infoKartaPlanety.toggleOpen();
                 }
                 ))
-        }
+            }
 
-        
-
-        // const planety = this.populatePlanetarySystem(scene);    
-        // // const spinAnim = createSpinAnimation();
-        // // star.animations.push(spinAnim);
-        // // scene.beginAnimation(star, 0, 60, true);
-    
-        // const glowLayer = new GlowLayer("glowLayer", scene);
-    
-        // planety.forEach(p => {
-        //     glowLayer.addExcludedMesh(p);
-        //     // p.animations.push(spinAnim);
-        //     scene.beginAnimation(p, 0, 60, true, BABYLON.Scalar.RandomRange(0.1, 3));
-        // });       
-        
         return scene;
     }
 
     private setupAnimation(): BABYLON.Animation {
         const rotationAnimation = new BABYLON.Animation(
             'rotationAnimation',
-            'rotation.y', // property to animate
-            30, // frame rate
-            BABYLON.Animation.ANIMATIONTYPE_FLOAT, // animation type
-            BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE // animation loop mode
+            'rotation.y',
+            30,
+            BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE 
         );
 
         const keyFrames = [];
@@ -208,12 +198,4 @@ export class SlunecniSoustava {
         return this.meshIdInView;
         
     }
-
-    // public async setAr(): Promise<void> {
-    //     const xr = await this.scene.createDefaultXRExperienceAsync({
-    //         uiOptions: {
-    //             sessionMode: 'immersive-ar'
-    //         }
-    //     });
-    // }
 }
