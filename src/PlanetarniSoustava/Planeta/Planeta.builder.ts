@@ -5,7 +5,7 @@ import { ObjeznaDraha } from './ObjeznaDraha/ObjeznaDraha';
 import { IPlaneta } from "./Planeta.interface";
 
 export class Planeta{
-    public createPlanetu(planeta: string, scene: BABYLON.Scene): BABYLON.Mesh{
+    public static createPlanetu(planeta: string, scene: BABYLON.Scene): BABYLON.Mesh{
         const dataPlanety: IPlaneta = DataPlanet.orbitalniPrvky[planeta];
 
         const modelPlanety: BABYLON.Mesh = BABYLON.MeshBuilder.CreateSphere(dataPlanety.nazev, { diameter: dataPlanety.polomer * 2}, scene);
@@ -62,7 +62,7 @@ export class Planeta{
         return modelPlanety;
     }
 
-    public createObjeznouDrahu(planeta: string, scene: BABYLON.Scene): BABYLON.LinesMesh{
+    public static createObjeznouDrahu(planeta: string, scene: BABYLON.Scene): BABYLON.LinesMesh{
         const dataPlanety: IPlaneta = DataPlanet.orbitalniPrvky[planeta];
         const numPoints = 100;
         const points: BABYLON.Vector3[] = ObjeznaDraha.vypocetObjezneDrahy(dataPlanety.elementyDrahy, 100);
@@ -73,7 +73,7 @@ export class Planeta{
         const orbit: BABYLON.LinesMesh = BABYLON.MeshBuilder.CreateLines(dataPlanety.nazev + "Orbit", {
                 points: points, colors: barva
             }, scene);
-        
+
         return orbit;
     }
 

@@ -4,8 +4,6 @@ import { Planeta } from './Planeta/Planeta.builder';
 
 export class PlanetarniSoustava {
     private scene: BABYLON.Scene;
-    private planetaBuilder: Planeta = new Planeta();
-
     public constructor (scene: BABYLON.Scene){
         this.scene = scene;
     }
@@ -15,11 +13,13 @@ export class PlanetarniSoustava {
         for (const planeta of Object.values(EPlanety)) {
             planetarniSoustava.push( 
                 {
-                    planeta: this.planetaBuilder.createPlanetu(planeta, this.scene),
-                    objeznaDrahaPlanety: this.planetaBuilder.createObjeznouDrahu(planeta, this.scene)
+                    planeta: Planeta.createPlanetu(planeta, this.scene),
+                    objeznaDrahaPlanety: Planeta.createObjeznouDrahu(planeta, this.scene)
                 }
             ) 
         }
         return planetarniSoustava;
     }
+
+    public createSingleOrbit(): void 
 }

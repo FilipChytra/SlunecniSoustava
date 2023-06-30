@@ -8,6 +8,7 @@ import { InfoKartaPlanety } from './GUI/PlanetMenu';
 import HvezdnaOblohaPhotoDomeUrl from '/src/textury/starmap_2020_4k.jpg';
 import { DataPlanet } from './PlanetarniSoustava/DataPlanet';
 import { LoadingAnimation } from './GUI/LoadingAnimation';
+import { Planeta } from './PlanetarniSoustava/Planeta/Planeta.builder';
 export class SlunecniSoustava {
     public engine: BABYLON.Engine;
     public scene: BABYLON.Scene;
@@ -16,6 +17,7 @@ export class SlunecniSoustava {
     private zoomFactor: number;
     public meshIdInView: BABYLON.Mesh;
     public infoKartaPlanety: InfoKartaPlanety;
+    public loading: boolean = true;
 
     constructor(readonly canvas: HTMLCanvasElement) {
         this.engine = new BABYLON.Engine(canvas);
@@ -27,7 +29,6 @@ export class SlunecniSoustava {
         this.infoKartaPlanety = new InfoKartaPlanety(this);
         this.engine.loadingScreen = new LoadingAnimation('');
         this.engine.displayLoadingUI();
-
     }
 
     debug(debugOn: boolean = true) {
@@ -48,8 +49,9 @@ export class SlunecniSoustava {
                 if (this.canvas.style.height !== "50%" && this.canvas.style.height !== "100%" || this.canvas.style.width !== "50%" && this.canvas.style.width !== "100%") {
                     this.engine.resize()
                 }
-                if(this.scene.isReady()){
+                if(this.scene.isReady() && this.loading){
                     this.engine.hideLoadingUI();
+                    this.loading = false;
                 }
              
             })
@@ -188,7 +190,18 @@ export class SlunecniSoustava {
     }
 
     public setMeshInView(planeta: string): BABYLON.Mesh{
+        if (this.meshIdInView && this.scene.getMeshByName(this.meshIdInView.name + 'Orbit')){
+            this.scene.getMeshByName(this.meshIdInView.name + 'Orbit')?.dispose();
+            const newOrbit = Planeta.createObjeznouDrahu(this.meshIdInView.name, this.scene);
+            newOrbit.parent = this.scene.getMeshByName('SlunečníSoustava');
+        }
         this.meshIdInView = <BABYLON.Mesh>this.scene.getMeshById(planeta);
+
+        if (this.scene.getMeshByName(planeta + 'Orbit')){
+            const orbitMaterial = new BABYLON.StandardMaterial('orbitMaterial', this.scene);
+            orbitMaterial.emissiveColor = DataPlanet.orbitalniPrvky[this.meshIdInView.name].barva.scale(2);
+            this.scene.getMeshByName(planeta + 'Orbit')!.material = orbitMaterial;
+        }
         const nextLowerRadiusLimit = DataPlanet.orbitalniPrvky[this.meshIdInView.name] ? <number>DataPlanet.orbitalniPrvky[this.meshIdInView.name].minZoomFactor : 230;
         if(this.camera!.radius < nextLowerRadiusLimit || this.camera!.radius - this.camera!.lowerRadiusLimit! == 0) {
             this.camera!.lowerRadiusLimit = nextLowerRadiusLimit;
