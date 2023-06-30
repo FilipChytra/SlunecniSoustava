@@ -189,11 +189,13 @@ export class SlunecniSoustava {
 
     public setMeshInView(planeta: string): BABYLON.Mesh{
         this.meshIdInView = <BABYLON.Mesh>this.scene.getMeshById(planeta);
-        this.camera!.lowerRadiusLimit = DataPlanet.orbitalniPrvky[this.meshIdInView.name] ? <number>DataPlanet.orbitalniPrvky[this.meshIdInView.name].minZoomFactor : 230;
-        if(this.camera!.radius < this.camera!.lowerRadiusLimit) {
+        const nextLowerRadiusLimit = DataPlanet.orbitalniPrvky[this.meshIdInView.name] ? <number>DataPlanet.orbitalniPrvky[this.meshIdInView.name].minZoomFactor : 230;
+        if(this.camera!.radius < nextLowerRadiusLimit || this.camera!.radius - this.camera!.lowerRadiusLimit! == 0) {
+            this.camera!.lowerRadiusLimit = nextLowerRadiusLimit;
             this.camera!.radius = this.camera!.lowerRadiusLimit;
             this.scaleOnZoom();   
         }
+        this.camera!.lowerRadiusLimit = nextLowerRadiusLimit;
         this.scaleOnZoom();   
         return this.meshIdInView;
         
