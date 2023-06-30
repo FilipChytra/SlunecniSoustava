@@ -20,6 +20,4 @@ export class PlanetarniSoustava {
         }
         return planetarniSoustava;
     }
-
-    public createSingleOrbit(): void 
 }
