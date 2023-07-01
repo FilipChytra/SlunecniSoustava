@@ -1,22 +1,20 @@
 import * as BABYLON from '@babylonjs/core';
 import "@babylonjs/inspector";
-import { Slunce } from './slunce/Slunce.model';
-import { PlanetarniSoustava } from './PlanetarniSoustava/PlanetarniSoustava';
-import { InfoKartaPlanety } from './GUI/PlanetMenu';
-
-
-import HvezdnaOblohaPhotoDomeUrl from '/src/textury/starmap_2020_4k.jpg';
-import { DataPlanet } from './PlanetarniSoustava/DataPlanet';
+import { Sun } from './sun/Sun.model';
+import { PlanetarySystem } from './PlanetarySystem/PlanetarySystem';
+import { AppControls } from './GUI/AppControls';
+import StarMap from '/src/textury/starmap_2020_4k.jpg';
+import { PlanetaryData } from './PlanetarySystem/PlanetaryData';
 import { LoadingAnimation } from './GUI/LoadingAnimation';
-import { Planeta } from './PlanetarniSoustava/Planeta/Planeta.builder';
-export class SlunecniSoustava {
+import { Planet } from './PlanetarySystem/Planet/Planet.builder';
+export class SolarSystem {
     public engine: BABYLON.Engine;
     public scene: BABYLON.Scene;
-    private readonly slunce: Slunce = new Slunce();
+    private readonly sun: Sun = new Sun();
     private camera: BABYLON.ArcRotateCamera | undefined;
     private zoomFactor: number;
     public meshIdInView: BABYLON.Mesh;
-    public infoKartaPlanety: InfoKartaPlanety;
+    public appControls: AppControls;
     public loading: boolean = true;
 
     constructor(readonly canvas: HTMLCanvasElement) {
@@ -26,12 +24,12 @@ export class SlunecniSoustava {
         this.meshIdInView = this.setMeshInView("Slunce")
 
         this.getObserver(canvas).observe(canvas)
-        this.infoKartaPlanety = new InfoKartaPlanety(this);
+        this.appControls = new AppControls(this);
         this.engine.loadingScreen = new LoadingAnimation('');
         this.engine.displayLoadingUI();
     }
 
-    debug(debugOn: boolean = true) {
+    debug(debugOn: boolean) {
         if (debugOn) {
             this.scene.debugLayer.show({ overlay: true });
         } else {
@@ -80,15 +78,15 @@ export class SlunecniSoustava {
     }
 
     private scaleOnZoom(): void {
-        const slunecniSoustava = this.scene.getMeshById("SlunečníSoustava");
-        if (slunecniSoustava) slunecniSoustava.scaling.setAll(1 / Math.pow(1.05, this.zoomFactor))
+        const solarSystem = this.scene.getMeshById("SlunečníSoustava");
+        if (solarSystem) solarSystem.scaling.setAll(1 / Math.pow(1.05, this.zoomFactor))
         this.meshIdInView.scaling.setAll(300000 / Math.pow(1.05, this.zoomFactor) )
     }
 
     private shiftToView(){
         const moveByVector: BABYLON.Vector3 = this.meshIdInView.position;
-        const slunecniSoustava = this.scene.getMeshById("SlunečníSoustava");
-        if (slunecniSoustava) slunecniSoustava.position.copyFrom(slunecniSoustava.position.subtract(moveByVector).scale(1 / Math.pow(1.05, this.zoomFactor)));
+        const solarSystem = this.scene.getMeshById("SlunečníSoustava");
+        if (solarSystem) solarSystem.position.copyFrom(solarSystem.position.subtract(moveByVector).scale(1 / Math.pow(1.05, this.zoomFactor)));
     }
 
     private createScene(engine: BABYLON.Engine): BABYLON.Scene {
@@ -105,16 +103,16 @@ export class SlunecniSoustava {
               camDist: number = 350,
               camTarget: BABYLON.Vector3 = BABYLON.Vector3.Zero();
 
-        const kamera: BABYLON.ArcRotateCamera = new BABYLON.ArcRotateCamera("kamera1", camAlpha, camBeta, camDist, camTarget, scene);
+        const camera: BABYLON.ArcRotateCamera = new BABYLON.ArcRotateCamera("Kamera", camAlpha, camBeta, camDist, camTarget, scene);
 
-        this.camera = kamera;
-        kamera.lowerRadiusLimit
+        this.camera = camera;
+        camera.lowerRadiusLimit
 
-        kamera.useAutoRotationBehavior = true;
-        kamera.autoRotationBehavior!.idleRotationSpeed = -0.05;
-        kamera.autoRotationBehavior!.idleRotationSpinupTime = 5000;
-        kamera.autoRotationBehavior!.idleRotationWaitTime = 2000;
-        kamera.attachControl(true);
+        camera.useAutoRotationBehavior = true;
+        camera.autoRotationBehavior!.idleRotationSpeed = -0.05;
+        camera.autoRotationBehavior!.idleRotationSpinupTime = 5000;
+        camera.autoRotationBehavior!.idleRotationWaitTime = 2000;
+        camera.attachControl(true);
 
         const light: BABYLON.PointLight = new BABYLON.PointLight("starLight", BABYLON.Vector3.Zero(), scene);
         light.intensity = .15;
@@ -123,42 +121,38 @@ export class SlunecniSoustava {
 
         const glowLayer: BABYLON.GlowLayer = new BABYLON.GlowLayer("glowLayer", scene);
 
-        const hveznaObloha: BABYLON.PhotoDome = new BABYLON.PhotoDome("hvěznáObloha", HvezdnaOblohaPhotoDomeUrl, {size: 10000}, scene);
+        const starMap: BABYLON.PhotoDome = new BABYLON.PhotoDome("hvěznáObloha", StarMap, {size: 10000}, scene);
 
-        const slunecniSoustava = new BABYLON.Mesh("SlunečníSoustava", scene);
-        const slunce: BABYLON.Mesh = this.slunce.createSlunce(scene); 
-        slunce.actionManager = new BABYLON.ActionManager(scene);
-        slunce.actionManager.registerAction(
+        const solarSystem = new BABYLON.Mesh("SlunečníSoustava", scene);
+        const sun: BABYLON.Mesh = this.sun.createSlunce(scene); 
+        sun.actionManager = new BABYLON.ActionManager(scene);
+        sun.actionManager.registerAction(
             new BABYLON.ExecuteCodeAction(
             BABYLON.ActionManager.OnDoublePickTrigger,
             () => {
-                this.infoKartaPlanety.toggleOpen();
+                this.appControls.toggleOpen();
             }
             ))
-        slunce.parent = slunecniSoustava;
-        light.parent = slunce;
+        sun.parent = solarSystem;
+        light.parent = sun;
 
-        const animaceRotacePlanety: BABYLON.Animation = this.setupAnimation();
+        const planetAnimation: BABYLON.Animation = this.setupAnimation();
 
-        const planety = new PlanetarniSoustava(scene).naplnitPlanetarniSoustavu();
+        const planets = new PlanetarySystem(scene).populatePlanetarySystem();
 
-        for (const planeta of planety) {
-            planeta.planeta.parent = slunecniSoustava;
-            if(planeta.planeta.name === "Země"){
-                planeta.planeta.material
-            }
-            planeta.planeta.animations.push(animaceRotacePlanety);
-            scene.beginAnimation(planeta.planeta ,0, 3000, true);
-            planeta.objeznaDrahaPlanety.parent = slunecniSoustava;
-            planeta.planeta.actionManager = new BABYLON.ActionManager(scene);
+        for (const planet of planets) {
+            planet.planet.parent = solarSystem;
+            planet.planet.animations.push(planetAnimation);
+            scene.beginAnimation(planet.planet ,0, 3000, true);
+            planet.planetOrbit.parent = solarSystem;
+            planet.planet.actionManager = new BABYLON.ActionManager(scene);
 
-            planeta.planeta.actionManager.registerAction(
+            planet.planet.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(
                 BABYLON.ActionManager.OnDoublePickTrigger,
                 () => {
-                    this.infoKartaPlanety.toggleOpen();
-                }
-                ))
+                    this.appControls.toggleOpen();
+                }))
             }
 
         return scene;
@@ -189,20 +183,20 @@ export class SlunecniSoustava {
         return rotationAnimation
     }
 
-    public setMeshInView(planeta: string): BABYLON.Mesh{
+    public setMeshInView(planet: string): BABYLON.Mesh{
         if (this.meshIdInView && this.scene.getMeshByName(this.meshIdInView.name + 'Orbit')){
             this.scene.getMeshByName(this.meshIdInView.name + 'Orbit')?.dispose();
-            const newOrbit = Planeta.createObjeznouDrahu(this.meshIdInView.name, this.scene);
+            const newOrbit = Planet.createOrbit(this.meshIdInView.name, this.scene);
             newOrbit.parent = this.scene.getMeshByName('SlunečníSoustava');
         }
-        this.meshIdInView = <BABYLON.Mesh>this.scene.getMeshById(planeta);
+        this.meshIdInView = <BABYLON.Mesh>this.scene.getMeshById(planet);
 
-        if (this.scene.getMeshByName(planeta + 'Orbit')){
+        if (this.scene.getMeshByName(planet + 'Orbit')){
             const orbitMaterial = new BABYLON.StandardMaterial('orbitMaterial', this.scene);
-            orbitMaterial.emissiveColor = DataPlanet.orbitalniPrvky[this.meshIdInView.name].barva.scale(2);
-            this.scene.getMeshByName(planeta + 'Orbit')!.material = orbitMaterial;
+            orbitMaterial.emissiveColor = PlanetaryData.planetData[this.meshIdInView.name].color.scale(2);
+            this.scene.getMeshByName(planet + 'Orbit')!.material = orbitMaterial;
         }
-        const nextLowerRadiusLimit = DataPlanet.orbitalniPrvky[this.meshIdInView.name] ? <number>DataPlanet.orbitalniPrvky[this.meshIdInView.name].minZoomFactor : 230;
+        const nextLowerRadiusLimit = PlanetaryData.planetData[this.meshIdInView.name] ? <number>PlanetaryData.planetData[this.meshIdInView.name].minZoomFactor : 230;
         if(this.camera!.radius < nextLowerRadiusLimit || this.camera!.radius - this.camera!.lowerRadiusLimit! == 0) {
             this.camera!.lowerRadiusLimit = nextLowerRadiusLimit;
             this.camera!.radius = this.camera!.lowerRadiusLimit;
@@ -210,7 +204,6 @@ export class SlunecniSoustava {
         }
         this.camera!.lowerRadiusLimit = nextLowerRadiusLimit;
         this.scaleOnZoom();   
-        return this.meshIdInView;
-        
+        return this.meshIdInView;   
     }
 }

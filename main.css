@@ -1,0 +1,234 @@
+body {
+    margin: 0px;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  #previousPlanet, #nextPlanet {
+    background-color: transparent;
+    border: none;
+    height: 12rem;
+    width: 4rem;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+
+
+  #nextPlanet {
+    right: 0;
+  }
+
+  #previousPlanet {
+    left: 0;
+  }
+
+  #openInfoCardBtn{
+    background-color: transparent;
+    padding: auto 0;
+    border: none;
+    height: 40px;
+    width: 40px;
+    position: initial;
+    cursor: pointer;
+  }
+
+
+  #content{
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+  }
+
+  #content.vertical{
+    flex-direction: column;
+  }
+
+  #renderCanvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  #canvasContainer{
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    transition: all 1s ease-out;
+    position: relative;
+  }
+
+  #loadingScreen{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 1s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #222;
+    z-index: 10;
+  }
+
+  .hide{
+    opacity: 0;
+  }
+
+  .rotatingAnimation{
+    animation: spin 5s linear infinite;
+  }
+
+  #canvasContainer.openInfoCard {
+    width: 50%;
+  }
+
+  #canvasContainer.vertical {
+    width: 100%;
+    height: 100%;
+  }
+
+  #canvasContainer.vertical.openInfoCard{
+    width: 100%;
+    height: 50%;
+  }
+
+  #infoCard{
+    width: 50%;
+    height: 100%;
+    position: relative;
+  }
+
+  #infoCard.vertical{
+    width: 100%;
+    height: 50%;
+  }
+
+  #headerTitle.vertical{
+    top: 100%;
+    bottom: 0;
+    transform: translate(-50%, -100%);
+  }
+
+  #closeInfoCardBtn{
+    background-color: transparent;
+    border: none;
+    padding: 2rem;
+    position: absolute;
+    height: 5rem;
+    width: 5rem;
+    left: 100%;
+    top: 0;
+    cursor: pointer;
+    transform: translate(-100%, 0) scale(1.5);
+  }
+
+  .full-width {
+    width: 100% !important;
+  }
+
+  .infoPlanet{
+    height: 100%;
+    background-color: #222;
+    padding: 2rem;
+    color: white;
+    overflow-x: scroll;
+  }
+
+  h3 {
+    color: white;
+    margin-top:1rem;
+    margin-bottom:1rem;
+    font-size: 4vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  h5 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 3vw;
+    color:  darkgoldenrod;
+    margin: 0;
+    padding-bottom: .5vw;
+    border-bottom: 1px solid #666;
+  }
+
+  h5 span {
+    color:  darkgoldenrod;
+    color: #666;
+    
+  }
+
+  #infoCard.vertical h5 {
+    font-size: 3vh;
+  }
+
+  .tile {
+    margin-top: 2vh;
+  }
+
+  h4 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.3vw;
+    color: #666;
+    margin: 0;
+
+  }
+
+  #infoCard.vertical h4 {
+    font-size: 1.2vh;
+  }
+
+  #text {
+    max-height: 35%;
+    min-width: 45vw;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.9vw;
+    text-align: justify;
+  }
+
+  #infoCard.vertical #text {
+    font-size: 1.7vh;
+    text-align: left;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    margin-bottom: 2rem;
+
+  }
+
+  .card {
+    min-width: 100%;
+    max-height: 35%;
+    position: relative;
+  }
+
+  #canvasContainer{
+    position: relative;
+  }
+
+  #headerTitle{
+    max-height: 12rem;
+    position: absolute;
+    padding: 2rem;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 1s ease-out;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes spin{
+    100% {transform: rotate(360deg);}
+  }

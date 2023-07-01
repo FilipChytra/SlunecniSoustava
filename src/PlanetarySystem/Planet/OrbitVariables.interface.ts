@@ -1,4 +1,4 @@
-export interface IElementyDrahy {
+export interface IOrbitVariables {
     
 // poloosa elipsy vyjadřená v metrech a dělená 10 miliony
     a: number;

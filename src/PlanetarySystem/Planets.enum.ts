@@ -1,4 +1,4 @@
-export enum EPlanety {
+export enum EPlanets {
     Merkur = "Merkur",
     Venuse = "Venuše",
     Zeme = "Země",

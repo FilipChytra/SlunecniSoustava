@@ -1,51 +1,35 @@
-# BabylonJs + vite Boilerplate
+# Aplikace modelu sluneční soustavy - Bakalářská práce
 
-## Description
+Tato webová aplikace slouží jako model sluneční soustavy a je součástí mé bakalářské práce. Je postavena na frameworku Babylon.js a umožňuje uživatelům prozkoumávat a interaktivně se pohybovat mezi vesmírnými tělesy v 3D prostředí.
 
-This is a BabylonJS + vite minimal boilerplate for development and production to work with **typescript**. 
-It starts faster than webpack and allow debugging from vscode.
+## Funkce
 
-## instructions
+- Realistické 3D zobrazení sluneční soustavy
+- Interaktivní ovládání pro navigaci a průzkum modelu
+- Informace o jednotlivých vesmírných tělesech
+- Přesné zobrazení relativních velikostí a obježných drah planet
 
-- clone or download the repo
-- npm install
-- For development: `npm run dev`
-- For production: `npm run build` then to preview what was built `npm run preview`
+## Instrukce
 
-## Development mode and debugging
-First `npm run dev`
-Then in vscode press F5, otherwise just open a browser at http://localhost:3000/
+Pro spuštění aplikace na vašem počítači postupujte podle následujících kroků:
 
-## Live Demo
-You can see this repository live here:
-https://babylonjs-vite-boilerplate.vercel.app/
+1. Naklonujte nebo stáhněte si tento repozitář.
+2. Nainstalujte potřebné závislosti pomocí příkazu `npm install`.
+3. Spusťte vývojový server pomocí příkazu `npm run dev`.
+4. Otevřete webový prohlížeč a zadejte adresu `http://localhost:3000` pro přístup k aplikaci.
 
-## Production build
-First `npm run build`
-A `dist` folder is created and contains the distribution. 
-You can `npm run preview` it on your development machine.
-Production preview runs at http://localhost:5000/ . The terminal will display external URLs if you want to test from a phone or tablet.
+## Živá ukázka
 
-## File Structure
+Živou ukázku aplikace modelu sluneční soustavy můžete vidět na následující adrese: [Odkaz na ukázku](https://filipchytra.github.io/SlunecniSoustava/)
 
-### /index.html
-This file is used as a template by vite to create the actual **index.html** that will be served to the client.
+## Kompilace pro produkční nasazení
 
-### /public
-This folder contains your html asset. The files in this folder are served by the test webserver as root files.
+Pro kompilaci aplikace pro produkční nasazení postupujte podle následujících kroků:
 
-### /src 
-This is where you should place all your application code.
+1. Spusťte příkaz `npm run build` pro vygenerování distribučních souborů.
+2. Bude vytvořena složka `dist`, která obsahuje optimalizovanou a zmenšenou verzi aplikace.
+3. Pro zobrazení produkčního buildu spusťte příkaz `npm run preview` a otevřete webový prohlížeč na adrese `http://localhost:5000`.
 
-### /src/main.ts
-This is the entry point of the app. 
 
-### /src/AppOne.ts
-A sample app that copy the code from the babylon.js playground.
+Těšte se na objevování krás sluneční soustavy s aplikací modelu sluneční soustavy!
 
-## Thank you!
-
-Thank you for using it, feel free to contribute in any way you can/want, just keep in mind that this should stay as a very mimimalistic boilerplate. 
-If you'd like to add complexity just fork it and let me know when you're done, so that I might reference it here in case someone comes looking for a more opinionated environment.
-
-Enjoy!

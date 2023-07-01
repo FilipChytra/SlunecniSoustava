@@ -1,5 +1,4 @@
-import { InfoKartaPlanety } from './GUI/PlanetMenu';
-import { SlunecniSoustava as App } from './SlunecniSoustava';
+import { SolarSystem as App } from './SolarSystem';
 
 window.addEventListener('DOMContentLoaded', () => {
     let canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;

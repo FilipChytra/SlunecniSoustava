@@ -15,7 +15,7 @@ export class LoadingAnimation implements ILoadingScreen{
   }
 
   public hideLoadingUI() {
-    this.loadingScreen!.classList.add('loaded');
+    this.loadingScreen!.classList.add('hide');
     setTimeout(() => {
         this.loadingScreen?.style.setProperty('display', 'none')
     }, 1000)
