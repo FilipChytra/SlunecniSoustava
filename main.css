@@ -13,16 +13,16 @@ body {
     width: 4rem;
     position: absolute;
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translate(0, -50%) scale(2);
   }
 
 
   #nextPlanet {
-    right: 0;
+    right: 4vw;
   }
 
   #previousPlanet {
-    left: 0;
+    left: 4vw;
   }
 
   #openInfoCardBtn{
