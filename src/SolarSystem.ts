@@ -80,7 +80,7 @@ export class SolarSystem {
     private scaleOnZoom(): void {
         const solarSystem = this.scene.getMeshById("SlunečníSoustava");
         if (solarSystem) solarSystem.scaling.setAll(1 / Math.pow(1.05, this.zoomFactor))
-        this.meshIdInView.scaling.setAll(300000 / Math.pow(1.05, this.zoomFactor) )
+        this.meshIdInView.scaling.setAll(300000 / Math.pow(1.05, this.zoomFactor))
     }
 
     private shiftToView(){
@@ -90,12 +90,6 @@ export class SolarSystem {
     }
 
     private createScene(engine: BABYLON.Engine): BABYLON.Scene {
-        const startScene = this.createStartScene(engine);
-        return startScene;
-
-    }
-
-    private createStartScene(engine: BABYLON.Engine): BABYLON.Scene {
         const scene: BABYLON.Scene = new BABYLON.Scene(engine);
 
         const camAlpha: number = 0,
@@ -106,7 +100,6 @@ export class SolarSystem {
         const camera: BABYLON.ArcRotateCamera = new BABYLON.ArcRotateCamera("Kamera", camAlpha, camBeta, camDist, camTarget, scene);
 
         this.camera = camera;
-        camera.lowerRadiusLimit
 
         camera.useAutoRotationBehavior = true;
         camera.autoRotationBehavior!.idleRotationSpeed = -0.05;
